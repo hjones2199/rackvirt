@@ -16,7 +16,7 @@
            with-open-vir)
   
   (define-ffi-definer define-virtiface
-    (ffi-lib "/nix/store/akswcq9vm263i9s853l16gz23smqqvks-libvirt-6.3.0/lib/libvirt.so"))
+    (ffi-lib "/usr/lib/libvirt.so"))
   
   (define-virtiface virConnectOpen (_fun _string -> _pointer))
   (define-virtiface virConnectClose (_fun _pointer -> _int))
