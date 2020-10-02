@@ -1,3 +1,5 @@
+#!/usr/bin/env racket
+
 #lang racket
 (require ffi/unsafe ffi/unsafe/define xml rackunit)
 
@@ -14,7 +16,7 @@
            with-open-vir)
   
   (define-ffi-definer define-virtiface
-    (ffi-lib "/usr/lib/libvirt/connection-driver/libvirt_driver_interface"))
+    (ffi-lib "/nix/store/akswcq9vm263i9s853l16gz23smqqvks-libvirt-6.3.0/lib/libvirt.so"))
   
   (define-virtiface virConnectOpen (_fun _string -> _pointer))
   (define-virtiface virConnectClose (_fun _pointer -> _int))
@@ -56,11 +58,9 @@
   
   (with-open-vir (x "")
     (printf "Hostname: ~a~%" (virConnectGetHostname x))
-    ;; (printf "Capabilities: ~%~a~%" (serialize-capabilities x))
+    (printf "Capabilities: ~%~a~%" (serialize-capabilities x))
     (printf "Connection Type: ~a~%" (virConnectGetType x))
     (printf "Connection URI: ~a~%" (virConnectGetURI x))
     (printf "Connection ~a secure~%"
             (if (equal? (virConnectIsSecure x) 1) "is" "is not"))
-    (printf "~a~%" (xexpr->string domain-xexpr))
-    (let ([dom1 (virDomainDefineXML x (xexpr->string domain-xexpr))])
-      (virDomainCreate dom1))))
+    (printf "~a~%" (xexpr->string domain-xexpr))))
